@@ -1,0 +1,11 @@
+# =========================================================================
+# INFRAESTRUCTURA CTI - ORQUESTACIÓN DE INGESTA Y MANTENIMIENTO (WAZUH)
+# =========================================================================
+# NOTA: al ser un fichero de /etc/cron.d/, cada línea lleva el usuario (root) entre
+# el horario y el comando. Si estas líneas se pegan en "crontab -e", hay que quitarlo.
+
+# -------------------------------------------------------------------------
+# Ejecución, cada 90 minutos, del ingestor de eventos recogidos de MISP hacia Wazuh
+# -------------------------------------------------------------------------
+0 0,3,6,9,12,15,18,21 * * * root /bin/bash /opt/misp_ingestor.sh >/dev/null 2>&1
+30 1,4,7,10,13,16,19,22 * * * root /bin/bash /opt/misp_ingestor.sh >/dev/null 2>&1

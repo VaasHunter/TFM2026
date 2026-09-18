@@ -1,0 +1,55 @@
+Access broker
+Advanced Persistent Threat
+Adversary-in-the-Middle
+AitM
+APT
+ARP Spoofing
+BEC
+Botnet
+breach
+brecha
+Brute Force Attack
+Buffer Overflow
+Business Email Compromise
+C2
+ciberataque
+Command and Control
+Credential Stuffing
+Cross-Site Request Forgery
+Cross-Site Scripting
+CSRF
+Data Exfiltration
+DDoS
+DNS Cache Poisoning
+Drive-by Compromise
+Exploit
+Fuga de datos
+Golden Ticket Attack
+Gps jamming
+Gps spoofing
+Kerberoasting
+Leak
+LFI
+Local File Inclusion
+Malware
+OS Command Injection
+Pass-the-Hash
+Pass-the-Ticket
+Privilege Escalation
+PtH
+PtT
+Ransomware
+RCE
+Remote Code Execution
+Server-Side Request Forgery
+Session Hijacking
+Spear Phishing
+SQL Injection
+SQLi
+SSRF
+Supply Chain Compromise
+Trojan
+XML External Entity Injection
+XSS
+XXE
+Zero-Day Exploit

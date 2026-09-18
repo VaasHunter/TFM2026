@@ -1,0 +1,22 @@
+<!-- Local rules -->
+
+<!-- La nomenclatura elegida para el ID de la regla (rule id) es superior a 100000 por el funcionanimento interno de Wazuh -->
+<!-- el cual se reserva para funcionamiento base hasta el 99999 -->
+<!-- Captura logs en formato JSON que venga con el campo "integration":"proactive-misp" y le otorga un nivel 14 (ALERTA). -->
+
+<!--  Apartados de este fichero:
+- level="14": nivel de alerta crítico. Quien invoca el script /var/ossec/integrations/custom-telegram no es el nivel, sino el bloque <integration> de ossec.conf, que apunta al id de esta regla (200505).
+- <field name="integration">^proactive-misp$</field>: Indica a Wazuh que analice los logs que el ingestor haya etiquetado específicamente como inteligencia proactiva de MISP.
+- $(misp_info): Extrae el título del evento que generaron los scrapers de Python, el cual es analizado por el custom-telegram y, dependiendo de dicho título, formatea la alerta como Ransomware, OSINT, Dark Web, etc. -->
+
+
+<group name="misp_proactive, threat_intel,">
+
+  <rule id="200505" level="14">
+    <decoded_as>json</decoded_as>
+    <field name="integration">^proactive-misp$</field>
+    <description>🚨 ALERTA ROJA (CTI): Inteligencia detectada -> $(misp_info)</description>
+    <group>misp_alert, proactive_defense, cti,</group>
+  </rule>
+
+</group>

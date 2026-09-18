@@ -1,0 +1,10 @@
+# Los scripts y ficheros de configuración van a servidores Linux: siempre con saltos de línea LF,
+# aunque el repositorio se clone en Windows (con CRLF fallarían el shebang, cron y logrotate).
+* text=auto
+*.sh text eol=lf
+*.py text eol=lf
+custom-telegram text eol=lf
+cron_tareas text eol=lf
+misp_tareas text eol=lf
+rotacion_logs text eol=lf
+*.xlsx binary

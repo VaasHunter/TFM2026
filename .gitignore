@@ -1,0 +1,18 @@
+# Credenciales reales (las plantillas son *.example)
+.secrets.env
+.env
+
+# Estado generado en ejecución
+.misp_cache.txt
+.misp_cache.txt.tmp
+misp_alerts.json*
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Sistema
+.DS_Store
+Thumbs.db

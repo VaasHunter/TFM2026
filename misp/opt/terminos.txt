@@ -1,0 +1,312 @@
+aduanas
+aerolinea
+aerolínea
+aeronave
+aeropuerto
+Alerta de Geovallado
+almacen
+almacén
+alta velocidad ferroviaria
+Aplicación de Mensajería de Última Milla
+astillero
+autobus
+autobús
+autocar
+Automatización del Control de Tráfico Aéreo
+autopista
+autovia
+autovía
+aviacion
+aviación
+Bolsa de Vuelo Electrónica
+buque
+cadena de frio
+cadena de frío
+cadena de suministro
+camion
+camión
+camionaje
+carga
+carretera
+Carta de Porte Electrónica
+catenaria ferroviaria
+cercanía
+cercanias
+conductor
+Conocimiento del Entorno Marítimo
+contenedor
+Control de Flujo de Materiales
+Control de Tráfico Centralizado
+Control Positivo de Trenes
+Controlador de Bus CAN
+darsena
+dársena
+despacho aduanero
+dgt
+dique seco
+direccion general de trafico
+direccion general de tráfico
+dirección general de trafico
+dirección general de tráfico
+dispositivo de registro electronico
+dispositivo de registro electrónico
+embarque
+enclavamiento ferroviario
+equipaje
+Equipos de Servicio en Tierra
+ERP Logístico
+estacion de tren
+estación de tren
+estiba
+ferrocarril
+flota
+fondeadero
+gestión de flotas
+grua portuaria
+grúa portuaria
+helipuerto
+hub logistico
+hub logístico
+infraestructura ferroviaria
+Lector de Etiquetas RFID
+locomotora
+logistica
+logística
+Manifiesto de Entrada de Aduanas
+Manifiesto de Mercancías Peligrosas
+maritimo
+marítimo
+mercancia
+mercancía
+mercancias ferroviarias
+mercancías ferroviarias
+metro
+muelle
+naviera
+paneles de mensaje variable
+Pasarela de Telemática de Flotas
+Pasarela de Telemática de Vehículos
+peaje
+pista
+Plataforma de Emparejamiento de Carga
+Plataforma de Reserva de Envíos
+Plataforma de Transitarios
+Plataforma de Visibilidad de Cadena de Suministro
+pmv
+practicaje
+Precinto Electrónico
+puerto
+raíl
+Registrador de Datos de Cadena de Frío
+Registrador de Datos de Travesía
+Registro de Nombre de Pasajero
+remolque
+rodalies
+Seguimiento de Dispositivos de Carga Unitaria
+semaforo
+semáforo
+semirremolque
+señalizacion ferroviaria
+señalización ferroviaria
+Sensor de Contenedor Inteligente
+Sensor de Seguimiento de Activos
+Servicio de Tráfico Marítimo
+Sistema de Comunicación y Direccionamiento de Aeronaves
+Sistema de Comunidad Portuaria
+Sistema de Control de Almacén
+Sistema de Control de Fronteras
+Sistema de Control de Grúas
+Sistema de Control de Salidas
+Sistema de Descripción de Trenes
+sistema de gestion de almacenes
+sistema de gestión de almacenes
+Sistema de Gestión de Carga
+Sistema de Gestión de Combustible
+Sistema de Gestión de Entregas
+Sistema de Gestión de Patios
+Sistema de Gestión de Terminales
+Sistema de Gestión de Vuelo
+sistema de gestion del transporte
+sistema de gestión del transporte
+Sistema de Navegación Marítima
+Sistema de Picking por Luz
+Sistema de Reserva de Aerolíneas
+Sistema de Terminal Intermodal
+Sistema de Tratamiento de Equipajes
+sistema europeo de gestion de trafico ferroviario
+sistema europeo de gestion de tráfico ferroviario
+sistema europeo de gestión de trafico ferroviario
+sistema europeo de gestión de tráfico ferroviario
+sistema global de navegacion por satelite
+sistema global de navegacion por satélite
+sistema global de navegación por satelite
+sistema global de navegación por satélite
+sistema SCADA Ferroviario
+Software de Optimización de Rutas
+tacografo
+tacógrafo
+terminal portuaria
+torre de control
+trafico aereo
+trafico aéreo
+tráfico aereo
+tráfico aéreo
+transporte
+transporte de carga
+transporte por carretera
+transportista
+tranvia
+tranvía
+tren
+tripulacion
+tripulación
+ultima milla
+última milla
+Vehículo de Guiado Automático
+via ferrea
+via férrea
+vía ferrea
+vía férrea
+vigilancia dependiente automatica por radiodifusion
+vigilancia dependiente automatica por radiodifusión
+vigilancia dependiente automática por radiodifusion
+vigilancia dependiente automática por radiodifusión
+vuelo
+ACARS
+ads-b
+air cargo
+air traffic
+Air Traffic Control Automation
+aircraft
+airline
+Airline Reservation System
+airport
+ais
+Asset Tracking Sensor
+Automated Guided Vehicle
+automatic dependent surveillance-broadcast
+aviation
+baggage
+Baggage Handling System
+boarding
+Border Control System
+bulk carrier
+bus
+CAN bus Controller
+cargo
+Cargo Management System
+Centralized Traffic Control
+check-in
+cold chain
+Cold Chain Data Logger
+commuter rail
+container
+control tower
+Crane Control System
+Custom Entry Manifest
+customs
+Dangerous Goods Manifest
+Delivery Management System
+Departure Control System
+dock
+driver
+ecdis
+eld
+electronic chart display and information system
+Electronic Flight Bag
+electronic logging device
+Electronic Seal
+Electronic Waybill
+ertms
+etcs
+european rail traffic management
+fleet
+fleet management
+Fleet Telematics Gateway
+flight
+Flight Management System
+freight
+Freight Forwarding Platform
+Freight Matching Marketplace
+Fuel Management System
+Geofencing Alert
+global navigation satellite system
+gnss
+ground handling
+Ground Support Equipment
+handling
+harbor
+harbour
+haulage
+haulier
+heliport
+high-speed rail
+highway
+imo number
+intermodal
+Intermodal Terminal System
+jet bridge
+last mile
+Last Mile Courier App
+locomotive
+logistics
+Logistics ERP
+Marine Navigation System
+maritime
+Maritime Domain Awareness
+Material Flow Control
+mmsi
+Passenger Name Record
+Pick to Light System
+pilotage
+port
+Port Community System
+Positive Train Control
+rail
+rail freight
+rail infrastructure
+Rail SCADA System
+railroad
+railway
+railway catenary
+railway signaling
+RFID Tag Reader
+ro-ro
+road
+road transport
+roro
+Route Optimization Software
+runway
+seafarer
+ship
+shipping
+Shipping Booking Platform
+shipyard
+Smart Container Sensor
+supply chain
+Supply Chain Visibility Platform
+tachograph
+tanker
+Terminal Operating System
+tms
+toll
+train
+Train Describer System
+train station
+tramway
+transport
+transportation management system
+truck
+trucking
+Unit Load Device Tracking
+variable message signs
+Vehicle Telematics Gateway
+vessel
+Vessel Traffic Service
+vms
+Voyage Data Recorder
+warehouse
+Warehouse Control System
+warehouse management system
+wms
+Yard Management System

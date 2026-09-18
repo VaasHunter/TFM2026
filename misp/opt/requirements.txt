@@ -1,0 +1,13 @@
+# Dependencias de los ingestores de MISP (misp/opt/ingestor_*.py)
+# Instalación:  pip install -r requirements.txt   (Python 3.9+)
+pymisp
+requests[socks]     # [socks] = PySocks, necesario para ingestor_onion.py (proxy Tor socks5h)
+urllib3
+python-dotenv
+tldextract          # ingestor_cert.py
+shodan              # ingestor_shodan.py
+OTXv2               # ingestor_otx.py
+feedparser          # ingestor_osint.py
+ddgs                # ingestor_paste.py (antes duckduckgo_search)
+beautifulsoup4      # ingestor_onion.py
+openpyxl            # ingestor_eurepoc.py

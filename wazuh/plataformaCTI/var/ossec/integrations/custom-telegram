@@ -1,0 +1,203 @@
+#!/bin/bash
+
+# =============================================================================
+# MÓDULO DE INTEGRACIÓN DE ALERTAS:TELEGRAM
+# =============================================================================
+# Objetivo: Se parsea el archivo JSON de alerta generado por el motor de Wazuh,
+#           se extraen y normalizan los campos según la fuente del evento
+#           y se formatea el contenido para su envío al bot mediante la API de Telegram.
+# =============================================================================
+
+ALERT_FILE=$1
+
+# Se cargan las credenciales, ocultas por su sensibilidad (OPSEC)
+source /opt/.secrets.env
+
+# Se configuran los parámetros de conexión con la API de Telegram
+WEBHOOK_URL="https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage"
+CHAT_ID="${TELEGRAM_CHAT}"
+
+# Se extraen los campos base del archivo de alerta JSON mediante el parametro "jq"
+INFO=$(jq -r '.data.misp_info // .misp_info // "N/A"' "$ALERT_FILE")
+DATE=$(jq -r '.data.misp_date // .misp_date // "N/A"' "$ALERT_FILE")
+
+# Se formatea la fecha al formato estándar (DD-MM-YYYY) si el valor existe
+if [ "$DATE" != "N/A" ]; then
+    DATE=$(date -d "$DATE" '+%d-%m-%Y' 2>/dev/null || echo "$DATE")
+fi
+
+TS=$(jq -r '.data.misp_timestamp // .misp_timestamp // empty' "$ALERT_FILE")
+URL=$(jq -r '.data.misp_url // .misp_url // "N/A"' "$ALERT_FILE")
+
+# Se convierte el timestamp en formato de hora legible (HH:MM:SS)
+if [ -n "$TS" ] && [ "$TS" != "null" ]; then
+    HORA=$(date -d @"$TS" '+%H:%M:%S' 2>/dev/null || echo "N/A")
+else
+    HORA="N/A"
+fi
+
+# Se inicializan las variables que forman las alertas
+FUENTE="N/A"
+TIPO_ATAQUE="N/A"
+VICTIMA="N/A"
+DETALLE_LIMPIO="N/A"
+
+# =============================================================================
+# LÓGICA DE PARSEO CONDICIONAL SEGÚN LA FUENTE DE INTELIGENCIA
+# =============================================================================
+
+# Se analiza la estructura de alertas procedentes de EuRepoC
+if [[ "$INFO" == *"EuRepoC"* ]]; then
+    FUENTE="EuRepoC"
+    VICTIMA=$(echo "$INFO" | awk -F'EuRepoC\\) - ' '{print $2}' | awk -F' \\|' '{print $1}')
+    TIPO_ATAQUE=$(echo "$INFO" | awk -F'Actor: ' '{print $2}' | awk -F' \\|' '{print $1}')
+    DETALLE_LIMPIO=$(echo "$INFO" | awk -F'Resumen: ' '{print $2}')
+    URL="N/A" 
+
+# Se analiza la estructura de alertas procedentes de AlienVault OTX
+elif [[ "$INFO" == *"OTX Pulse"* ]]; then
+    FUENTE="AlienVault OTX"
+    if [[ "$INFO" == *"| Objetivo:"* ]]; then
+        VICTIMA=$(echo "$INFO" | awk -F'| Objetivo: ' '{print $2}' | awk -F' \\| Actor:' '{print $1}')
+        TIPO_ATAQUE=$(echo "$INFO" | awk -F'| Actor: ' '{print $2}' | awk -F' \\| Informe:' '{print $1}')
+        DETALLE_LIMPIO=$(echo "$INFO" | awk -F'| Informe: ' '{print $2}')
+    fi
+
+# Se analiza la estructura de alertas procedentes de plataformas de Ransomware
+elif [[ "$INFO" == *"Ransomware"* ]]; then
+    FUENTE="Ransomware.live"
+    ACTOR=$(echo "$INFO" | awk -F'\\(' '{print $2}' | awk -F'\\)' '{print $1}')
+    TIPO_ATAQUE="Ransomware (${ACTOR:-N/A})"
+    VICTIMA=$(echo "$INFO" | awk -F'contra: ' '{print $2}')
+    DETALLE_LIMPIO="Posible incidente ransomware detectado."
+
+# Se analiza la estructura de alertas de vulnerabilidades de Shodan
+elif [[ "$INFO" == *"Shodan:"* && "$INFO" == *"Vulnerabilidades"* ]]; then
+    FUENTE="Shodan"
+    TIPO_ATAQUE="Puertos expuestos con CVEs"
+    VICTIMA=$(echo "$INFO" | awk -F'en ' '{print $2}' | awk -F' \\| IP:' '{print $1}')
+    IP_EXTRACTED=$(echo "$INFO" | awk -F'IP: ' '{print $2}' | awk -F' \\| Puerto:' '{print $1}')
+    URL="https://www.shodan.io/host/${IP_EXTRACTED}"
+    DETALLE_LIMPIO="Puertos abiertos detectados."
+
+# Se analiza la estructura de alertas de variaciones de EASM (Superficie de Ataque)
+elif [[ "$INFO" == *"EASM UPDATE:"* ]]; then
+    FUENTE="Shodan"
+    TIPO_ATAQUE="Variación de CVEs"
+    # El título generado por ingestor_shodan.py es "Variación en" (con tilde); "[^ ]*" evita depender de la codificación
+    VICTIMA=$(echo "$INFO" | awk -F'Variaci[^ ]* en ' '{print $2}' | awk -F' \\| IP:' '{print $1}')
+    IP_EXTRACTED=$(echo "$INFO" | awk -F'IP: ' '{print $2}' | awk -F' \\| Puerto:' '{print $1}')
+    DETALLE_LIMPIO=$(echo "$INFO" | awk -F'\\| ' '{print $4}')
+    URL="https://www.shodan.io/host/${IP_EXTRACTED}"
+
+# Se analiza la estructura de alertas detectadas en la Dark Web (Red Tor)
+elif [[ "$INFO" == *"Dark Web"* ]]; then
+    FUENTE="Dark Web"
+    VICTIMA=$(echo "$INFO" | awk -F'| Objetivo: ' '{print $2}' | awk -F' \\| Actor:' '{print $1}')
+    TIPO_ATAQUE="Fuga de Datos / Venta de Accesos"
+    DETALLE_LIMPIO="Mención detectada en portal Tor."
+
+# Se analiza la estructura de alertas relacionadas con sitios Paste
+elif [[ "$INFO" == *"Fuga de Informaci"* ]]; then
+    FUENTE="Sitios Paste"
+    TIPO_ATAQUE="Posible fuga de datos"
+    VICTIMA=$(echo "$INFO" | awk -F'sobre ' '{print $2}')
+    DETALLE_LIMPIO="Mención en repositorios de texto plano (Pastebin o similares)."
+
+# Se analiza la estructura de alertas de fuentes OSINT
+elif [[ "$INFO" == *"OSINT Feed"* ]]; then
+    FUENTE="OSINT"
+    VICTIMA=$(echo "$INFO" | awk -F'| Objetivo: ' '{print $2}' | awk -F' \\| Amenaza:' '{print $1}')
+    TIPO_ATAQUE="Información sobre ciberincidentes"
+    DETALLE_LIMPIO=$(echo "$INFO" | awk -F'| Informe: ' '{print $2}')
+
+# Se analiza la estructura de alertas estratégicas de la plataforma IncidentBuddy
+elif [[ "$INFO" == *"IncidentBuddy"* || "$INFO" == *"Perfil Estrategico"* ]]; then
+    FUENTE="Ciberbuddy"
+    GRUPO=$(echo "$INFO" | awk -F'Amenaza: ' '{print $2}' | awk -F' \\|' '{print $1}')
+    if [ -z "$GRUPO" ] || [ "$GRUPO" == "null" ]; then GRUPO=$(echo "$INFO" | awk -F'enaza: ' '{print $2}'); fi
+    if [ -z "$GRUPO" ]; then GRUPO=$(echo "$INFO" | awk -F': ' '{print $2}'); fi
+    TIPO_ATAQUE="${GRUPO:-N/A}"
+    VICTIMA="N/A"
+    DETALLE_LIMPIO="TTPs del grupo ${GRUPO:-N/A}, agregadas a MISP."
+    URL=$(jq -r '.data.misp_url // empty' "$ALERT_FILE")
+    if [ -z "$URL" ]; then URL="Enlace disponible en la plataforma MISP"; fi
+
+# Se analiza la estructura de alertas de certificados
+elif [[ "$INFO" == *"crt.sh"* ]]; then
+    FUENTE="crt.sh"
+    TIPO_ATAQUE="Phishing / Brand Impersonation"
+    
+    VICTIMA=$(echo "$INFO" | awk -F'- ' '{print $2}' | awk -F' \\| ID_CERT:' '{print $1}')
+    
+    # Se indica si VirusTotal hubiera encontrado coincidencias
+    VT_ALERTA=""
+    if [[ "$INFO" == *"VT DETECT:"* ]]; then
+        VT_STATS=$(echo "$INFO" | awk -F'VT DETECT: ' '{print $2}')
+        VT_ALERTA=" | VT: ${VT_STATS}"
+    fi
+    
+    ID_CERTIFICADOS=$(echo "$INFO" | awk -F'ID_CERT: ' '{print $2}' | awk -F' \\| VT DETECT:' '{print $1}')
+    
+    # Se consulta a la API de MISP para extraer el subdominio asociado al certificado
+    # El cuerpo JSON se construye con jq para que comillas o caracteres especiales del título no lo rompan
+    MISP_BODY=$(jq -n --arg info "$INFO" '{returnFormat: "json", eventinfo: $info, limit: 1}')
+    MISP_DATA=$(curl -s -k -X POST -H "Authorization: ${MISP_API_KEY}" -H "Accept: application/json" -H "Content-Type: application/json" -d "$MISP_BODY" "${MISP_URL}/attributes/restSearch")
+    DOMINIO_1=$(echo "$MISP_DATA" | jq -r '.response.Attribute[0].value // empty')
+    
+    if [ -n "$DOMINIO_1" ]; then
+        URL="https://${DOMINIO_1}"
+        DETALLE_LIMPIO="Posible infraestructura sospechosa detectada: ${DOMINIO_1}${VT_ALERTA} | ID en base de datos de crt.sh: ${ID_CERTIFICADOS}"
+    else
+        URL="https://crt.sh/?q=${VICTIMA// /%20}"
+        DETALLE_LIMPIO="Registrado certificado SSL con mención a una posible empresa española. ID en base de datos de crt.sh: ${ID_CERTIFICADOS}"
+    fi
+fi
+
+# =============================================================================
+# NORMALIZACIÓN Y ENVÍO DE ALERTA
+# =============================================================================
+
+# Se itera sobre las variables generadas para normalizar los valores nulos o vacíos
+for var in FUENTE TIPO_ATAQUE VICTIMA DETALLE_LIMPIO URL DATE HORA; do
+    val="${!var}"
+    val_low=$(echo "$val" | tr '[:upper:]' '[:lower:]')
+    if [[ -z "$val" || "$val_low" == "null" || "$val_low" == "not available" || "$val_low" == "unknown" ]]; then
+        declare "$var"="N/A"
+    fi
+done
+
+# Se trunca el detalle de la alerta
+DETALLE_LIMPIO=$(echo "$DETALLE_LIMPIO" | head -n 3 | cut -c1-150)
+
+# Se escapan los caracteres especiales de HTML (&, <, >) de todos los campos antes de montar el mensaje.
+# Los valores proceden de fuentes externas (RSS, paste, Tor, ransomware...) y con parse_mode HTML
+# un simple "AT&T" o un "<" suelto hace que Telegram rechace el mensaje entero (HTTP 400) y la alerta se pierda.
+# Debe ir DESPUÉS del truncado para no cortar una entidad (&amp;) por la mitad.
+html_escape() {
+    printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g'
+}
+for var in FUENTE TIPO_ATAQUE VICTIMA DETALLE_LIMPIO URL DATE HORA; do
+    declare "$var"="$(html_escape "${!var}")"
+done
+
+# Se construye la estructura del mensaje JSON con marcado HTML
+PAYLOAD=$(jq -n \
+  --arg chat_id "$CHAT_ID" \
+  --arg text "🚨 <b>ALERTA CTI</b> 🚨
+
+📅 <b>Fecha:</b> $DATE
+⏰ <b>Hora:</b> $HORA
+📡 <b>Fuente:</b> $FUENTE
+🔗 <b>URL del IoC:</b> $URL
+
+⚔️ <b>Amenaza:</b> $TIPO_ATAQUE
+🎯 <b>Objetivo:</b> $VICTIMA
+
+📝 <b>Detalle:</b> <i>$DETALLE_LIMPIO</i>" \
+  '{chat_id: $chat_id, parse_mode: "HTML", text: $text}')
+
+# Se ejecuta el envío de la notificación
+curl -s -X POST -H "Content-Type: application/json" -d "$PAYLOAD" "$WEBHOOK_URL" > /dev/null
+
+exit 0

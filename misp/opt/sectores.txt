@@ -1,0 +1,212 @@
+transport
+transporte
+logistics
+logística
+logistica
+freight
+cargo
+carga
+mercancía
+mercancia
+supply chain
+cadena de suministro
+intermodal
+warehouse
+almacén
+almacen
+hub logístico
+hub logistico
+customs
+aduanas
+despacho aduanero
+fleet
+flota
+last mile
+última milla
+ultima milla
+cold chain
+cadena de frío
+cadena de frio
+airport
+aeropuerto
+aviation
+aviación
+aviacion
+airline
+aerolínea
+aerolinea
+flight
+vuelo
+air traffic
+tráfico aéreo
+trafico aéreo
+tráfico aereo
+trafico aereo
+air cargo
+aircraft
+aeronave
+boarding
+embarque
+check-in
+baggage
+equipaje
+handling
+control tower
+torre de control
+ground handling
+jet bridge
+runway
+pista
+heliport
+helipuerto
+port
+puerto
+maritime
+marítimo
+maritimo
+shipping
+naviera
+vessel
+buque
+ship
+container
+contenedor
+terminal portuaria
+dock
+muelle
+dársena
+darsena
+seafarer
+tripulación
+tripulacion
+grúa portuaria
+grua portuaria
+ro-ro
+roro
+bulk carrier
+tanker
+shipyard
+astillero
+dique seco
+harbor
+harbour
+fondeadero
+pilotage
+practicaje
+estiba
+imo number
+mmsi
+ais
+railway
+ferrocarril
+raíl
+rail
+train
+tren
+railroad
+locomotive
+locomotora
+high-speed rail
+alta velocidad ferroviaria
+commuter rail
+cercanía
+cercanias
+rodalies
+metro
+tramway
+tranvía
+tranvia
+rail freight
+mercancías ferroviarias
+mercancias ferroviarias
+railway signaling
+señalización ferroviaria
+señalizacion ferroviaria
+enclavamiento ferroviario
+railway catenary
+catenaria ferroviaria
+vía férrea
+via férrea
+vía ferrea
+via ferrea
+estación de tren
+estacion de tren
+train station
+rail infrastructure
+infraestructura ferroviaria
+truck
+camión
+camion
+trucking
+camionaje
+road transport
+transporte por carretera
+haulage
+transporte de carga
+haulier
+transportista
+bus
+autobús
+autobus
+autocar
+fleet management
+gestión de flotas
+tachograph
+tacógrafo
+tacografo
+toll
+peaje
+autopista
+autovía
+autovia
+carretera
+semáforo
+semaforo
+paneles de mensaje variable
+variable message signs
+pmv
+vms
+highway
+road
+remolque
+semirremolque
+driver
+conductor
+eld
+dispositivo de registro electrónico
+dispositivo de registro electronico
+electronic logging device
+dgt
+dirección general de tráfico
+direccion general de tráfico
+dirección general de trafico
+direccion general de trafico
+ads-b
+automatic dependent surveillance-broadcast
+vigilancia dependiente automática por radiodifusión
+vigilancia dependiente automática por radiodifusion
+vigilancia dependiente automatica por radiodifusión
+vigilancia dependiente automatica por radiodifusion
+gnss
+global navigation satellite system
+sistema global de navegación por satélite
+sistema global de navegación por satelite
+sistema global de navegacion por satélite
+sistema global de navegacion por satelite
+ecdis
+electronic chart display and information system
+ertms
+european rail traffic management
+etcs
+sistema europeo de gestión de tráfico ferroviario
+sistema europeo de gestión de trafico ferroviario
+sistema europeo de gestion de tráfico ferroviario
+sistema europeo de gestion de trafico ferroviario
+tms
+transportation management system
+sistema de gestión del transporte
+sistema de gestion del transporte
+wms
+warehouse management system
+sistema de gestión de almacenes
+sistema de gestion de almacenes

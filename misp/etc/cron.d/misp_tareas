@@ -1,0 +1,52 @@
+# =========================================================================
+# INFRAESTRUCTURA CTI - ORQUESTACIÓN DE SCRAPERS (MÁQUINA MISP)
+# Se programan los scripts (scrapers) en diferentes horarios durante para evitar solapamientos.
+# Algunos de ellos se ejecutan semanalmente por motivos de límite de API y porque
+# los resultados no cambian tanto en el tiempo, como los scrips de TTPs.
+# También se incluyen script de limpieza de la BBDD de MISP.
+#
+# NOTA: al ser un fichero de /etc/cron.d/, cada línea lleva el usuario (root) entre
+# el horario y el comando. Si estas líneas se pegan en "crontab -e", hay que quitarlo.
+# =========================================================================
+
+# 1. Inteligencia Estratégica (EuRepoC) - Diario a las 07:00 AM
+0 7 * * * root /usr/bin/python3 /opt/ingestor_eurepoc.py >/dev/null 2>&1
+
+# 2. Perfilado Estratégico (IncidentBuddy) - SEMANAL (domingos a las 03:00 AM)
+# Las TTPs no suelen cambiar cada día, por eso se establece en semanal.
+# Se lanza una hora después que Shodan para que no se solapen.
+0 3 * * 0 root /usr/bin/python3 /opt/ingestor_incidentbuddy.py >/dev/null 2>&1
+
+# 3. Monitorización de Certificados y Suplantación (crt.sh) - Diario a las 01:00 AM
+0 1 * * * root /usr/bin/python3 /opt/ingestor_cert.py >/dev/null 2>&1
+
+# 4. Monitorización de Superficie de Ataque (SHODAN) - SEMANAL (domingos a las 02:00 AM)
+# Para no exceder el límite de peticiones a la API, se establece en semanal
+0 2 * * 0 root /usr/bin/python3 /opt/ingestor_shodan.py >/dev/null 2>&1
+
+# 5. Monitorización de OSINT Feeds - Cada 4 horas (en el minuto 00)
+0 */4 * * * root /usr/bin/python3 /opt/ingestor_osint.py >/dev/null 2>&1
+
+# 6. Alertas de Ransomware (Ransomware.live) - Cada 2 horas (en el minuto 10)
+10 */2 * * * root /usr/bin/python3 /opt/ingestor_ransomware.py >/dev/null 2>&1
+
+# 7. Monitorización de Inteligencia Táctica (OTX) - Cada 4 horas (en el minuto 15)
+15 */4 * * * root /usr/bin/python3 /opt/ingestor_otx.py >/dev/null 2>&1
+
+# 8. Monitorización de Dark Web / Tor (Onion) - Cada 6 horas (en el minuto 30)
+30 */6 * * * root /usr/bin/python3 /opt/ingestor_onion.py >/dev/null 2>&1
+
+# 9. Fugas de Información en Pastes - Cada 3 horas (en el minuto 45)
+# Alta prioridad: las fugas de texto plano se indexan y borran rápidamente.
+45 */3 * * * root /usr/bin/python3 /opt/ingestor_paste.py >/dev/null 2>&1
+
+# =========================================================================
+# MANTENIMIENTO DEL REPOSITORIO (MISP)
+# =========================================================================
+# Limpieza automática de la base de datos. Se ejecuta todos los días a las 00:30 AM para mantener el disco duro optimizado.
+# Se puede incrementar si se desea guardar un histórico más amplio.
+#
+# PENDIENTE: /opt/limpieza_misp.py NO está incluido en este repositorio, así que la línea
+# está desactivada (con ella activa, cron falla cada noche sin dejar rastro por el >/dev/null).
+# Añadir el script y descomentar la línea:
+#30 0 * * * root /usr/bin/python3 /opt/limpieza_misp.py >/dev/null 2>&1

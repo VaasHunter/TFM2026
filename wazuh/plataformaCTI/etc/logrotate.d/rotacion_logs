@@ -1,0 +1,43 @@
+#Este archivo comprime diariamente el archivo json que contiene los eventos de Wazuh, aplicando una retención de 30 días:
+
+
+/var/ossec/logs/misp_alerts.json {
+
+    su root wazuh
+
+    #se ejecuta con usuario root
+
+    daily
+
+    #daily: Ejecuta la rotación una vez al día
+
+    rotate 30
+   
+    #rotate 30: Guarda un histórico exacto de los últimos 30 días. El día 31, borrará automáticamente el archivo más antiguo.
+
+    compress
+
+    #compress: Comprime el archivo rotado usando gzip 
+
+    delaycompress
+
+    #delaycompress: Pospone la compresión para evitar errores si se estaba leyendo el archivo cuando se estaba comprimiendo.
+
+    missingok
+
+    #missingok: Si el archivo no existe, lo ignora y continua.
+
+    notifempty
+
+    #notifempty: Si el archivo está vacío, no lo rota para no crear archivos .gz vacíos
+
+    copytruncate
+
+    #copytruncate: Hace una copia del contenido al archivo .gz y luego vacía el archivo original dejándolo a 0 bytes.
+
+    
+}
+
+
+# Para buscar una cadena en concreto en un log comprimido, se puede realizar con el comando "zgrep". En el ejemplo siguiente, se busca una IP específica:
+# zgrep "2.134.147.5" /var/ossec/logs/misp_alerts.json.14.gz

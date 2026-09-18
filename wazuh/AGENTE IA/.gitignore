@@ -1,0 +1,7 @@
+.env
+__pycache__/
+*.pyc
+pending_review/
+inputs/
+rules_repo.json
+.DS_Store
